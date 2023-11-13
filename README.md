@@ -33,6 +33,11 @@ _Response (500 - Internal Server Error)_
 
 > Create todolist
 
+_Request Params_
+```
+/<priority>
+```
+
 _Request Header_
 ```
 not needed
@@ -77,7 +82,13 @@ _Response (400 - Validation Error)_
 
 ### POST /add-to-favorite/:priority/:title
 > add todolist to favorites
-> _Request Header_
+
+_Request Params_
+```
+/<priority>/<title>
+```
+
+ _Request Header_
 ```
 not needed
 ```
@@ -149,7 +160,13 @@ _Response (200)_
 
 ### GET /all/:priority
 
+
  > Get by priority
+
+_Request Params_
+```
+/<priority>
+```
 
 _Request Params_
 
