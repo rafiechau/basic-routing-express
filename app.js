@@ -21,10 +21,14 @@ const handleClientError = (res, status, message) => {
 //handle untuk get selutuh data todo
 app.get("/all", (req, res) => {
     try {
-        res.send(data);
-        res.status(200);
+        if (Object.keys(data.data).length === 0) {
+            // Jika data kosong, kirimkan pesan "Data Not Found" dengan status 404
+            return handleClientError(res, 404, "Data Not Found");
+        }
+
+        res.status(200).json({data, status: 'Success'});
       } catch (error) {
-        res.status(500).json({ message: error.message });
+        return handleServerError(res)
     }
 })
 
@@ -48,7 +52,7 @@ app.get("/pagination/:priority", (req, res) => {
     try {
         const { priority } = req.params;
         const { page, limit } = req.query;
-        console.log(page)
+
         const listPriority = ["high", "medium", "low"];
 
         if (!listPriority.includes(priority)) {
@@ -56,8 +60,8 @@ app.get("/pagination/:priority", (req, res) => {
         }
 
         // Konversi page dan limit menjadi angka
-        const pageNumber = parseInt(page, 10) || 1;
-        const itemsPerPage = parseInt(limit, 10) || 10;
+        const pageNumber = parseInt(page, 10) || 1; //konversi nilai page ke integer, nilai defaultnya adalah 1
+        const itemsPerPage = parseInt(limit, 10) || 10; //konversi nilai page ke integer, nilai defaultnya adalah 10
 
         // Hitung indeks awal dan akhir untuk data yang akan ditampilkan
         const startIndex = (pageNumber - 1) * itemsPerPage;
@@ -82,7 +86,10 @@ app.get("/all/:priority/:title", (req, res) => {
         if (!listPriority.includes(priority)) {
             return handleClientError(res, 404, 'URL Not Found');
         }
-        // Mencari data dengan judul yang mengandung searchTerm
+        // return lowercaseTitle.includes(title.toLowerCase()); 
+        //digunakan untuk memeriksa apakah judul yang sudah dikonversi menjadi huruf kecil (lowercaseTitle)
+        // mengandung teks yang juga sudah dikonversi menjadi huruf kecil (title.toLowerCase()). 
+        //Jika iya, maka elemen tersebut akan disertakan dalam hasil pencarian (filteredData).
         const filteredData = data.data[priority].filter((el) => {
             const lowercaseTitle = el.title.toLowerCase();
             return lowercaseTitle.includes(title.toLowerCase());
@@ -134,11 +141,6 @@ app.post('/create/:priority', (req, res) => {
         }
 
 
-        if (!data.data[priority]) {
-            // Pastikan prioritas yang diminta ada dalam data Anda
-            return handleClientError(res, 400, "Invalid Priority");
-        }
-
         if (data.data[priority].find((el) => el.title.toLowerCase() === newData.title.toLowerCase())) {
             return handleClientError(res, 400, 'Data Already Existed');
         }
@@ -156,9 +158,9 @@ app.post('/create/:priority', (req, res) => {
     }
 })
 
-app.put('/all/:priority/:name', (req, res) => {
+app.put('/all/:priority/:title', (req, res) => {
     try{
-        const { priority, name } = req.params
+        const { priority, title } = req.params
         const newData = req.body
         const listPriority= ["high", "medium", "low"]
 
@@ -190,10 +192,10 @@ app.put('/all/:priority/:name', (req, res) => {
         }
 
         // Mencari data berdasarkan judul tanpa memperhatikan spasi
-        const formattedTitle = name.replace(/\s/g, '').toLowerCase();
+        const formattedTitle = title.replace(/\s/g, '').toLowerCase();
         // console.log(formattedTitle)
         const foundDataIndex = data.data[priority].findIndex((el) => el.title.toLowerCase().replace(/\s/g, '') === formattedTitle);
-        // console.log(foundDataIndex)
+        console.log(foundDataIndex)
 
         if (foundDataIndex === -1) {
             return handleClientError(res, 404, 'Data Not Found');
@@ -291,7 +293,7 @@ app.get("/favorites", (req, res) => {
             return res.status(404).json({ message: "No Favorites Found" });
         }
 
-        return res.status(200).json({ favorites: data.favorites });
+        return res.status(200).json({ favorites: data.favorites, status: "Success" });
     } catch (error) {
         return handleServerError(res);
     }
