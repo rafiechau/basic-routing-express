@@ -150,9 +150,18 @@ _Response (200)_
 	        <data_todolist_item>
 	       ]
         },
+    "favorites": [
+	<favorites_item>
+	]
 
     "status": "Success"
 
+}
+```
+_Response (404 - Validation Error)_
+```
+{
+    "message": "Data Not Found"
 }
 ```
 
