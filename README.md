@@ -483,8 +483,8 @@ not needed
 _Response (200)_
 ```
 {
-    "data": [
-      <data_todolist_item>
+    "favorites": [
+      <data_favorites_item>
     ],
     "message": "Item Removed from Favorites"
 }
