@@ -113,7 +113,7 @@ _Response (400 - Validation Error)_
 }
 ```
 
-_Response (400 - Validation Error)_
+_Response (404 - Validation Error)_
 ```
 {
     "message": "URL Not Found"
