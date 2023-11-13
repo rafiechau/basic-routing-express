@@ -310,19 +310,17 @@ _Response (404)_
     "message": "No Matching Data Found"
 }
 ```
+```
+{
+    "message": "URL Not Found"
+}
+```
 
 ---
 
-### GET /all/:priority/:title
+### GET /favorites
 
  > Get all data favorites
-
-_Request Params_
-
-```
-/<priority_name>/<title>(in case sensitive)
-
-```
 
 _Request Header_
 
@@ -339,7 +337,7 @@ _Response (200)_
 ```
 {
 
-    "data": [
+    "favorites": [
         "title": "<title>",
         "status": "<status>"
         "description": "<description>"
@@ -349,13 +347,13 @@ _Response (200)_
 
 }
 ```
-
 _Response (404)_
 ```
 {
     "message": "No Favorites Found"
 }
 ```
+
 
 ---
 
